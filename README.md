@@ -1,4 +1,4 @@
-# heart_rate_visualizer
+# Heart Rate Visualizer
 
 ## Application Overview:
 
