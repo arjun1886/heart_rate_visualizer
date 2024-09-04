@@ -1,6 +1,6 @@
 # Heart Rate Visualizer
 
-## Application Overview:
+## Application Overview :
 
 The user sees a web page on the browser to upload a csv file of heart rate data.
 
@@ -8,7 +8,7 @@ After uploading the file the user receives a line chart of heart rate data as if
 
 There is an anomaly detection field that is populated in case there are sudden spikes, drops or missing heart rates in the data.
 
-## Architecture Overview:
+## Architecture Overview :
 
 The front end is designed using vanilla javascript, html, css.
 
@@ -24,7 +24,7 @@ This data is sent back to the front end at a rate of 1 row per second. This is d
 
 Web sockets are used when streaming data in real time between the client and the server where the network connection needs to be open for the duration of the data streaming period. 
 
-## System Design:
+## System Design :
 
 ### Front end :
 
