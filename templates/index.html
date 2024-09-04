@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Rate Monitor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div id="uploadContainer">
+        <input type="file" id="fileInput">
+        <button id="uploadButton">Upload CSV</button>
+    </div>
+
+    <div id="chartContainer">
+        <canvas id="heartRateChart"></canvas>
+    </div>
+
+    <div>
+        <p id="anomalyField"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>
