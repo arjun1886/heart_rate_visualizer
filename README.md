@@ -54,6 +54,10 @@ Contains the use cases or application services, which define the actions that ca
 
 The outermost layer includes the frameworks and tools like databases, queues etc. These are considered details that can change without affecting the business logic. In our case it consists of code that interacts with MySQL and Kafka. This layer is represented by my_sql.py, subscriber.py, producer.py.  
 
+## Design Diagram :
+
+https://drive.google.com/file/d/1z4sTIcWDqXV9fPnXA9ZtiFlqYbKjj0PZ/view?usp=sharing
+
 #### Anomaly detection logic : 
 
 The logic is very simple where, if data is missing, the previous data point is used for the heart_rate, sudden spikes and dropped are configured as a delta of 30 bpm (an arbitrary choice), the anomaly field is populated accordingly to show the user.  
