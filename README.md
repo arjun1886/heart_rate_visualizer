@@ -56,7 +56,7 @@ The outermost layer includes the frameworks and tools like databases, queues etc
 
 #### Anomaly detection logic : 
 
-The logic is very simple where, if data is missing, the previous data value is used for the heart_rate, sudden spikes and dropped are configured as a delta of 30 bpm (an arbitrary choice), the anomaly field is populated accordingly to show the user.  
+The logic is very simple where, if data is missing, the previous data point is used for the heart_rate, sudden spikes and dropped are configured as a delta of 30 bpm (an arbitrary choice), the anomaly field is populated accordingly to show the user.  
 
 #### Additional Info :  
 
