@@ -5,13 +5,11 @@ from entities.error import ErrorMessage
 import time
 
 def persist_heart_data(data):
-    error_message = ErrorMessage()
     message = add_records(data)
-    error_message.set_message(message)
     if message == "":
-       error_message.set_code(200)
+       error_message = ErrorMessage(message,200)
     else:
-       error_message.set_code(500)
+       error_message = ErrorMessage("",500)
     return error_message
 
 def emit_heart_rate_data(socketio):

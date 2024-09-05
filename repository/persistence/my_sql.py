@@ -13,12 +13,15 @@ def add_records(records) -> str:
     )
     cursor = connection.cursor()
     error_message = ""
+    record = records[0]
+    timestamp = record.get('timestamp')
+    print(timestamp)
     try:
         for record in records:
-            time = record.get('time')
-            heart_rate = record.get('heartRate')
-            query = "INSERT INTO heart_rates (time, heart_rate) VALUES (%s, %s)"
-            cursor.execute(query, (time, heart_rate))
+            timestamp = record.get('timestamp')
+            heart_rate = float(record.get('heart_rate'))
+            query = "INSERT INTO heart_rate (timestamp, heart_rate) VALUES (%s, %s)"
+            cursor.execute(query, (timestamp, heart_rate))
 
         connection.commit()
     except mysql.connector.Error as err:

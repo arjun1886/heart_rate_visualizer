@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   // Set up WebSocket connection
-  const socket = io.connect('http://127.0.0.1:5000');
+  const socket = io({autoConnect: false});
 
   // Get references to the DOM elements
   const uploadButton = document.getElementById('uploadButton');
@@ -45,6 +45,26 @@ document.addEventListener('DOMContentLoaded', function () {
       }
   });
 
+  function csvJSON(csv) {
+    const lines = csv.split('\n');
+    const headers = lines[0].split(',');
+  
+    const result = [];
+  
+    for (let i = 1; i < lines.length; i++) {
+      const currentLine = lines[i].split(',');
+      const obj = {};
+  
+      for (let j = 0; j < headers.length; j++) {
+        obj[headers[j]] = currentLine[j];
+      }
+  
+      result.push(obj);
+    }
+  
+    return JSON.stringify(result);
+  }
+  
   // Handle CSV file upload
   uploadButton.addEventListener('click', function () {
       const fileInput = document.getElementById('fileInput');
@@ -60,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
                   headers: {
                       'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify({ csvData })
+                  body: csvJSON(csvData)
               })
               .then(response => response.json())
               .then(data => {
@@ -74,6 +94,10 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
           alert('Please select a CSV file to upload.');
       }
+    socket.connect();
+    socket.on("connect", function() {
+        socket.emit("file_uploaded");
+    })
   });
 
   // Function to update the chart with new data
@@ -84,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Listen for heart rate data and anomalies from the server
-  socket.on('heartRateData', function (data) {
+  socket.on('heart_rate_data', function (data) {
       const timestamp = new Date(data.timestamp);  // Convert timestamp to Date object
       const heartRate = data.heart_rate;
       const anomaly = data.anomaly;
