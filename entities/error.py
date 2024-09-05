@@ -4,7 +4,7 @@ class ErrorMessage:
         self.code = code
 
     def get_message(self):
-        if self.message is not "":
+        if self.message is "":
            return ""
         return "The following error occurred : " + self.message
 

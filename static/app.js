@@ -1,49 +1,50 @@
 document.addEventListener('DOMContentLoaded', function () {
   // Set up WebSocket connection
-  const socket = io({autoConnect: false});
+  const socket = io('http://127.0.0.1:5000');
 
   // Get references to the DOM elements
   const uploadButton = document.getElementById('uploadButton');
   const anomalyField = document.getElementById('anomalyField');
   const ctx = document.getElementById('heartRateChart').getContext('2d');
 
-  // Initialize the chart
   const heartRateChart = new Chart(ctx, {
-      type: 'line',  // Line chart for heart rate over time
-      data: {
-          labels: [],  // This will hold the timestamps
-          datasets: [{
-              label: 'Heart Rate (bpm)',  // Label for the dataset
-              data: [],  // This will hold the heart rate data
-              borderColor: 'rgba(75, 192, 192, 1)',
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              fill: false,
-          }]
-      },
-      options: {
-          scales: {
-              x: {
-                  type: 'time',  // Use time scale for x-axis
-                  time: {
-                      unit: 'second'  // Display timestamps in seconds
-                  },
-                  title: {
-                      display: true,
-                      text: 'Timestamp',  // Label for the x-axis
-                  }
-              },
-              y: {
-                  title: {
-                      display: true,
-                      text: 'Heart Rate (bpm)',  // Label for the y-axis
-                  },
-                  beginAtZero: true,
-                  suggestedMin: 50,
-                  suggestedMax: 150
-              }
-          }
-      }
-  });
+    type: 'line',  // Line chart for heart rate over time
+    data: {
+        labels: [],  // This will hold the timestamps
+        datasets: [{
+            label: 'Heart Rate (bpm)',  // Label for the dataset
+            data: [],  // This will hold the heart rate data points
+            borderColor: 'rgba(75, 192, 192, 1)',  // Line color
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',  // Background color under the line
+            fill: true,  // Fill the area under the line
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'time',  // Use time scale for x-axis
+                time: {
+                    unit: 'second',  // Display timestamps in seconds
+                    tooltipFormat: 'HH:mm:ss',  // Format for tooltip when hovering
+                    displayFormats: {
+                        second: 'HH:mm:ss'  // Display format for x-axis
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Timestamp'  // Label for the x-axis
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Heart Rate (bpm)'  // Label for the y-axis
+                },
+                beginAtZero: true,  // Start y-axis at zero
+            }
+        }
+    }
+});
 
   function csvJSON(csv) {
     const lines = csv.split('\n');
@@ -94,10 +95,8 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
           alert('Please select a CSV file to upload.');
       }
-    socket.connect();
-    socket.on("connect", function() {
-        socket.emit("file_uploaded");
-    })
+    
+    socket.emit("file_uploaded");
   });
 
   // Function to update the chart with new data
@@ -112,13 +111,14 @@ document.addEventListener('DOMContentLoaded', function () {
       const timestamp = new Date(data.timestamp);  // Convert timestamp to Date object
       const heartRate = data.heart_rate;
       const anomaly = data.anomaly;
-
       // Update the chart with the new data
       updateChart(timestamp, heartRate);
 
       // Display the anomaly in the text field if it exists
       if (anomaly) {
-          anomalyField.textContent = `Anomaly detected : ${anomaly}`;
+        anomalyField.textContent = `Anomaly detected : ${anomaly}`;
+      } else {
+        anomalyField.textContent = null
       }
   });
 });

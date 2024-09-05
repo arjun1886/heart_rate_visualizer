@@ -1,13 +1,8 @@
-from gevent.pywsgi import WSGIServer
 from flask import Flask, request, jsonify, send_from_directory
 from flask_socketio import SocketIO
 from use_case.heart.heart_processor import process_heart_rate_data, emit_heart_rate_data
-import json
 import os
-import asyncio
-
-#import eventlet
-#eventlet.monkey_patch()
+import ast
 
 app = Flask(__name__)
 
@@ -25,15 +20,13 @@ def process_csv_file():
     for elem in json_data:
         elem = str(elem).replace("'", "\"")
         elem = elem.replace("\\r", "")
-        data.append(json.loads(elem))
+        data.append(ast.literal_eval(elem))
     if not data:
         return jsonify({"error": "Invalid input please upload a csv file for processing"}), 400
     try:
         error_message = process_heart_rate_data(data)
-        print(error_message.get_message)
         return jsonify({"status": "File has been processed"}), 200
     except Exception as e:
-        print(f"Error uploading file")
         return jsonify({"error": str(e)}), 500
 
 @socketio.on('connect')
@@ -42,13 +35,11 @@ def handle_web_socket_connect(*args, **kwargs):
 
 @socketio.on('file_uploaded')
 def handle_file_uploaded(*args, **kwargs):
-    emit_heart_rate_data(socketio)
+    socketio.start_background_task(target=emit_heart_rate_data, socketio=socketio)
 
 @socketio.on('disconnect')
 def handle_web_socket_disconnect():
     print('Client disconnected')
 
 if __name__ == '__main__':
-    socketio.run(app, host="0.0.0.0", port=5000, debug=True)
-    """server = WSGIServer(('0.0.0.0', 5000), app)
-    server.serve_forever()"""
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True, use_reloader=False)
