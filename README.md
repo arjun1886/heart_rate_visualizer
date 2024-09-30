@@ -60,11 +60,18 @@ https://drive.google.com/file/d/1z4sTIcWDqXV9fPnXA9ZtiFlqYbKjj0PZ/view?usp=shari
 
 #### Anomaly detection logic : 
 
-The logic is very simple where, if data is missing, the previous data point is used for the heart_rate, sudden spikes and dropped are configured as a delta of 30 bpm (an arbitrary choice), the anomaly field is populated accordingly to show the user.  
+The logic is very simple where, if data is missing, the heart_rate is displayed as 0 and anomaly field is populated with 'missing data', sudden spikes and dropped are configured as a delta of 30 bpm (an arbitrary choice), the anomaly field is populated accordingly to show the user.  
 
 #### Additional Info :  
 
 I decided to use Kafka which makes the system more complex, instead of just taking the rows of data and sending it through the web socket at 1 second intervals. The reason I did this was to show how to use stream processing technology since it would be important in the real world. I have focused more on the overall architecture and code organisation since that would be more developer dependent and more important in the context of building a large system. The anomaly detection section is something that can be leveraged through a 3rd party tech integration and hence I implemented something rudimentary.
+
+In addition, if the page is reloaded, the web socket connection is re-established and the chart is populated with heart rate data from the last data point which was displayed, this is possible by using Kafka.
+
+#### Challenges : 
+
+1. Sending data from Javascript to the Flask backend through the web socket led to data serialization issues.
+2. Setting up Kafka on the Mac was tedious and Kafka was a bottleneck in the app's performance at start time.
 
 
  
