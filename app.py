@@ -36,10 +36,7 @@ def process_csv_file():
 @socketio.on('connect')
 def handle_web_socket_connect(*args, **kwargs):
     print('Client connected')
-    #print("Creating heart-rate-topic in Kafka")
-    #create_topic('heart-rate-topic')
     
-
 @socketio.on('disconnect')
 def handle_web_socket_disconnect():
     print('Client disconnected')

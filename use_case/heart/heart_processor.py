@@ -16,7 +16,7 @@ def persist_heart_data(data):
 def preprocess_heart_data(data):
     for i in range(len(data)):
         if data[i]["heart_rate"] == None or data[i]["heart_rate"] == "":
-           data[i]["heart_rate"] = 0.0
+           data[i]["heart_rate"] = -1.0
     return data
      
 

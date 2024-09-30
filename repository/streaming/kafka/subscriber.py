@@ -33,7 +33,7 @@ def subscribe_to_heart_rate_data(socketio):
         consumer.close()
 
 def detect_heart_rate_anomaly(heart_rate_data, old_data):
-   if not heart_rate_data or not heart_rate_data["heart_rate"] or not heart_rate_data["timestamp"]:
+   if not heart_rate_data or heart_rate_data["heart_rate"]==-1.0 or not heart_rate_data["timestamp"]:
       heart_rate_data["anomaly"] = "Missing data"
       heart_rate_data["heart_rate"] = 0.0
    elif old_data:
