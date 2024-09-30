@@ -38,7 +38,8 @@ def detect_heart_rate_anomaly(heart_rate_data, old_data):
       heart_rate_data["heart_rate"] = 0.0
    elif old_data:
       if float(heart_rate_data["heart_rate"]) - float(old_data["heart_rate"]) > 30.0:
-         heart_rate_data["anomaly"] = "Sudden spike in heart rate, could be a health concern"
+         if float(old_data["heart_rate"]) != 0.0:
+            heart_rate_data["anomaly"] = "Sudden spike in heart rate, could be a health concern"
       elif float(old_data["heart_rate"]) - float(heart_rate_data["heart_rate"]) > 30.0:
          heart_rate_data["anomaly"] = "Sudden dip in heart rate, could be a health concern"
       else:

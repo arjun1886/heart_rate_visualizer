@@ -27,10 +27,8 @@ def process_csv_file():
         error_message = process_heart_rate_data(data)
         return jsonify({"status": "File has been processed"}), 200
     except Exception as e:
-        print(f"Following error occurred while processing heart rate data: {e}")
+        print(f"Following error occurred while processing heart: {e}")
         return jsonify({"error": str(e)}), 500
-    finally:
-        socketio.start_background_task(target=emit_heart_rate_data, socketio=socketio)
 
 @socketio.on('connect')
 def handle_web_socket_connect(*args, **kwargs):
@@ -41,4 +39,5 @@ def handle_web_socket_disconnect():
     print('Client disconnected')
 
 if __name__ == '__main__':
+    socketio.start_background_task(target=emit_heart_rate_data, socketio=socketio)
     socketio.run(app, host="0.0.0.0", port=5000, debug=True, use_reloader=False)

@@ -17,7 +17,7 @@ def add_records(records) -> str:
         for record in records:
             timestamp = record.get('timestamp')
             heart_rate = float(record.get('heart_rate'))
-            query = "INSERT INTO heart_rate (timestamp, heart_rate) VALUES (%s, %s)"
+            query = "INSERT INTO heart_rate (timestamp, heart_rate) VALUES (%s, %s) ON DUPLICATE KEY UPDATE heart_rate = VALUES(heart_rate);"
             cursor.execute(query, (timestamp, heart_rate))
     except mysql.connector.Error as err:
         error_message = err
