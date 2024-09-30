@@ -9,7 +9,7 @@ def subscribe_to_heart_rate_data(socketio):
         'auto.offset.reset': 'earliest'
     })
 
-    consumer.subscribe(['heart-rate-topic'])
+    consumer.subscribe(['heart_rate_topic'])
     old_data = {}
     try:
         while True:

@@ -14,7 +14,6 @@ def add_records(records) -> str:
     cursor = connection.cursor()
     error_message = ""
     try:
-        print("mysql records",len(records))
         for record in records:
             timestamp = record.get('timestamp')
             heart_rate = float(record.get('heart_rate'))

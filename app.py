@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_socketio import SocketIO
 from use_case.heart.heart_processor import process_heart_rate_data, emit_heart_rate_data
-from repository.streaming.kafka.topic import create_topic
 import os
 import ast
 
@@ -28,7 +27,7 @@ def process_csv_file():
         error_message = process_heart_rate_data(data)
         return jsonify({"status": "File has been processed"}), 200
     except Exception as e:
-        print("process API error", str(e))
+        print(f"Following error occurred while processing heart rate data: {e}")
         return jsonify({"error": str(e)}), 500
     finally:
         socketio.start_background_task(target=emit_heart_rate_data, socketio=socketio)
