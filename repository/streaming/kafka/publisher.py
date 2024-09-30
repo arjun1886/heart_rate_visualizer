@@ -30,7 +30,7 @@ def publish_heart_rate_data(records) -> ErrorMessage:
         for record in records:
             # Convert the record to JSON and send it
             producer.produce(
-                'heart_rate_topic', 
+                'heart-rate-topic', 
                 key=None,  # Optional: you can add keys for partitioning if needed
                 value=json.dumps(record),
                 callback=delivery_report  # Callback to check delivery status

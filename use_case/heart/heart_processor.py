@@ -5,13 +5,21 @@ from entities.error import ErrorMessage
 import time
 
 def persist_heart_data(data):
-    message = add_records(data)
+    preprocessed_data = preprocess_heart_data(data)
+    message = add_records(preprocessed_data)
     if message == "":
        error_message = ErrorMessage("",200)
     else:
        error_message = ErrorMessage(message,500)
     return error_message
     
+def preprocess_heart_data(data):
+    for i in range(len(data)):
+        if data[i]["heart_rate"] == None or data[i]["heart_rate"] == "":
+           data[i]["heart_rate"] = 0.0
+    return data
+     
+
 def process_heart_rate_data(data):
    db_error_message = persist_heart_data(data)
    message = db_error_message.get_message()

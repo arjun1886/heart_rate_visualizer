@@ -9,7 +9,7 @@ def subscribe_to_heart_rate_data(socketio):
         'auto.offset.reset': 'earliest'
     })
 
-    consumer.subscribe(['heart_rate_topic'])
+    consumer.subscribe(['heart-rate-topic'])
     old_data = {}
     try:
         while True:
@@ -35,6 +35,7 @@ def subscribe_to_heart_rate_data(socketio):
 def detect_heart_rate_anomaly(heart_rate_data, old_data):
    if not heart_rate_data or not heart_rate_data["heart_rate"] or not heart_rate_data["timestamp"]:
       heart_rate_data["anomaly"] = "Missing data"
+      heart_rate_data["heart_rate"] = 0.0
    elif old_data:
       if float(heart_rate_data["heart_rate"]) - float(old_data["heart_rate"]) > 30.0:
          heart_rate_data["anomaly"] = "Sudden spike in heart rate, could be a health concern"

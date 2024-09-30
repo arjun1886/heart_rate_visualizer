@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_socketio import SocketIO
 from use_case.heart.heart_processor import process_heart_rate_data, emit_heart_rate_data
+from repository.streaming.kafka.topic import create_topic
 import os
 import ast
 
@@ -27,15 +28,17 @@ def process_csv_file():
         error_message = process_heart_rate_data(data)
         return jsonify({"status": "File has been processed"}), 200
     except Exception as e:
+        print("process API error", str(e))
         return jsonify({"error": str(e)}), 500
+    finally:
+        socketio.start_background_task(target=emit_heart_rate_data, socketio=socketio)
 
 @socketio.on('connect')
 def handle_web_socket_connect(*args, **kwargs):
     print('Client connected')
-
-@socketio.on('file_uploaded')
-def handle_file_uploaded(*args, **kwargs):
-    socketio.start_background_task(target=emit_heart_rate_data, socketio=socketio)
+    #print("Creating heart-rate-topic in Kafka")
+    #create_topic('heart-rate-topic')
+    
 
 @socketio.on('disconnect')
 def handle_web_socket_disconnect():
